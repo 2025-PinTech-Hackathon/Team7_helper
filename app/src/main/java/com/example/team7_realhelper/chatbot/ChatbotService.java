@@ -53,16 +53,25 @@ public class ChatbotService {
                 Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
                     String responseBody = response.body().string();
-                    Log.d("DF", "Response: " + responseBody);
+
+                    // 파싱 시작
+                    JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+                    JsonObject queryResult = json.getAsJsonObject("queryResult");
+
+                    //fulfillmentText 사용
+                    if (queryResult.has("fulfillmentText")) {
+                        String chatbotReply = queryResult.get("fulfillmentText").getAsString();
+                        Log.d("VC", "Chatbot Reply: " + chatbotReply);
+
+                    }
+
                 } else {
-                    Log.e("DF", "Error: " + response.code());
+                    Log.e("VC", "Error: " + response.code());
                 }
 
             } catch (Exception e) {
-                Log.e("DF", "Ep: " + e.toString());
+                Log.e("VC", "Ep: " + e.toString());
             }
         }).start();
     }
-
 }
-
