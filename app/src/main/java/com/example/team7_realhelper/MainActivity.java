@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //챗봇 API 테스트
-        ChatbotService.sendMessageToChatbot(this, "결제");
+        //ChatbotService.sendMessageToChatbot(this, "결제");
 
         //음성 권한 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
