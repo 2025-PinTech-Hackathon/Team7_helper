@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.team7_realhelper.R;
+import com.example.team7_realhelper.chatbot.ChatbotService;
+import com.example.team7_realhelper.chatbot.VoiceListener;
+import com.example.team7_realhelper.chatbot.VoiceService;
 
 import java.nio.Buffer;
 
@@ -32,11 +35,30 @@ public class OverlayButton {
     private Button voiceBtn;
     private WindowManager.LayoutParams voiceParams;
 
+    private VoiceService voiceService;
+
     // 생성자
     public OverlayButton(Context context, OverlayManager manager) {
         this.context = context;
         this.manager = manager;
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+        voiceService = new VoiceService(context, new VoiceListener() {
+            @Override
+            public void onSpeechResult(String result) {
+                Log.d("VC","결과 도출");
+                // 👉 여기서 DialogflowClient.sendTextRequest(...) 호출 가능
+
+                ChatbotService.sendMessageToChatbot(context, result);
+                //Log.d("VC", "음성 이후 결과" + fac);
+            }
+
+            @Override
+            public void onSpeechError(String error) {
+                Log.d("VC","에러 발생: " + error);
+            }
+        });
+
     }
 
     public void show(){
@@ -129,7 +151,9 @@ public class OverlayButton {
             remove();
             manager.setFirstClick(true);
 
-            
+            Log.d("VC", "버튼 눌려짐");
+            voiceService.startListening();
+            Log.d("VC", "버튼 끝남");
         });
 
 
