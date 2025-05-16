@@ -7,35 +7,29 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.team7_realhelper.Overlay.OverlayService;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.team7_realhelper.chatbot.ChatbotService;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.dialogflow.v2.*;
-
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
-
-import okhttp3.*;
+import com.example.team7_realhelper.chatbot.*;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_OVERLAY_PERMISSION = 1000;
+    private static final int REQUEST_AUDIO_PERMISSION = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +54,20 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        //챗봇 테스트
-        //ChatbotService.sendMessageToChatbot(this, "결제 어디 있어");
 
-        // 권한 있으면
-        startOverlayService();   // 오버레이 서비스 시작
-        finish();
+        //챗봇 API 테스트
+        //ChatbotService.sendMessageToChatbot(this, "결제");
+
+        //음성 권한 요청
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+        } else {
+            // 권한 모두 있으면
+            startOverlayService();   // 오버레이 서비스 시작
+            finish();
+        }
     }
 
     private void startOverlayService() {
