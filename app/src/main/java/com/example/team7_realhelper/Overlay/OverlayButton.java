@@ -123,10 +123,10 @@ public class OverlayButton {
             manager.setFirstClick(true);
 
             Intent intent = new Intent(context, OverlayService.class);
-            intent.putExtra("x1", 860);  // 1단계 좌표 (송금)
-            intent.putExtra("y1", 520);
-            intent.putExtra("width1", 150);
-            intent.putExtra("height1", 150);
+            intent.putExtra("x1", 880);  // 1단계 좌표 (송금)
+            intent.putExtra("y1", 500);
+            intent.putExtra("width1", 100);
+            intent.putExtra("height1", 100);
 
             intent.putExtra("x2", 500);  // 2단계 좌표 (계좌번호 입력)
             intent.putExtra("y2", -940);
