@@ -1,6 +1,9 @@
 package com.example.team7_realhelper.Overlay;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
@@ -8,10 +11,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 
 import com.example.team7_realhelper.R;
+
 
 public class OverlayManager {
     private final Context context;
@@ -72,12 +74,35 @@ public class OverlayManager {
     }
 
 
-    public void showHighlightWithTooltip(int x, int y) {
+    public void showHighlightWithTooltip(int x, int y, int width, int height) {
+        // ✅ 기존 View 먼저 제거 (중복 강조 방지)
+        if (highlightView != null) {
+            try {
+                windowManager.removeViewImmediate(highlightView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            highlightView = null;
+        }
+        if (tooltipView != null) {
+            try {
+                windowManager.removeViewImmediate(tooltipView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            tooltipView = null;
+        }
+
+        // ✅ 새로운 강조 View 생성
         highlightView = new View(context);
         highlightView.setBackgroundResource(R.drawable.highlight_border);
 
+        int screenHeight = windowManager.getDefaultDisplay().getHeight();
+        int highlightX = x;
+        int highlightY = screenHeight / 2 - y;
+
         WindowManager.LayoutParams highlightParams = new WindowManager.LayoutParams(
-                150, 150,
+                width, height,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ?
                         WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
                         WindowManager.LayoutParams.TYPE_PHONE,
@@ -85,14 +110,14 @@ public class OverlayManager {
                 PixelFormat.TRANSLUCENT
         );
         highlightParams.gravity = Gravity.TOP | Gravity.LEFT;
-        highlightParams.x = x;
-        highlightParams.y = y;
+        highlightParams.x = highlightX;
+        highlightParams.y = highlightY;
 
         windowManager.addView(highlightView, highlightParams);
 
         tooltipView = new TextView(context);
         tooltipView.setText("여기를 눌러보세요");
-        tooltipView.setTextColor(0xFFFFFFFF); // white
+        tooltipView.setTextColor(0xFFFFFFFF);
         tooltipView.setBackgroundResource(R.drawable.tooltip_bg);
         tooltipView.setPadding(24, 16, 24, 16);
         tooltipView.setTextSize(14f);
@@ -107,28 +132,34 @@ public class OverlayManager {
                 PixelFormat.TRANSLUCENT
         );
         tooltipParams.gravity = Gravity.TOP | Gravity.LEFT;
-        tooltipParams.x = x + 160;
-        tooltipParams.y = y;
+        tooltipParams.x = highlightX;
+        tooltipParams.y = highlightY - 100;
 
         windowManager.addView(tooltipView, tooltipParams);
 
-        // 깜빡임 애니메이션
+        // 🔁 깜빡임 애니메이션
         ObjectAnimator blinkAnim = ObjectAnimator.ofFloat(highlightView, "alpha", 1f, 0f);
         blinkAnim.setDuration(700);
         blinkAnim.setRepeatMode(ValueAnimator.REVERSE);
         blinkAnim.setRepeatCount(ValueAnimator.INFINITE);
         blinkAnim.start();
 
+        // ⏱️ 3초 후 View 제거
         new Handler().postDelayed(() -> {
-            if (highlightView != null) {
-                blinkAnim.cancel();
-                windowManager.removeView(highlightView);
-                highlightView = null;
+            try {
+                if (highlightView != null) {
+                    blinkAnim.cancel();
+                    windowManager.removeViewImmediate(highlightView);
+                    highlightView = null;
+                }
+                if (tooltipView != null) {
+                    windowManager.removeViewImmediate(tooltipView);
+                    tooltipView = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (tooltipView != null) {
-                windowManager.removeView(tooltipView);
-                tooltipView = null;
-            }
-        }, 20000);
+        }, 3000);
     }
+
 }

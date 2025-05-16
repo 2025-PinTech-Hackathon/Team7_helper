@@ -1,13 +1,10 @@
 package com.example.team7_realhelper.Overlay;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,18 +12,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.team7_realhelper.MainActivity;
 import com.example.team7_realhelper.R;
-import com.example.team7_realhelper.chatbot.*;
 
 import java.nio.Buffer;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ServiceLoader;
 
 public class OverlayButton {
     private  final Context context;
@@ -44,41 +32,23 @@ public class OverlayButton {
     private Button voiceBtn;
     private WindowManager.LayoutParams voiceParams;
 
-    private VoiceService voiceService;
-
     // 생성자
     public OverlayButton(Context context, OverlayManager manager) {
         this.context = context;
         this.manager = manager;
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-        voiceService = new VoiceService(context, new VoiceListener() {
-            @Override
-            public void onSpeechResult(String result) {
-                Log.d("VC","결과 도출");
-                // 👉 여기서 DialogflowClient.sendTextRequest(...) 호출 가능
-
-                ChatbotService.sendMessageToChatbot(context, result);
-                //Log.d("VC", "음성 이후 결과" + fac);
-            }
-
-            @Override
-            public void onSpeechError(String error) {
-                Log.d("VC","에러 발생: " + error);
-            }
-        });
     }
 
     public void show(){
         sendBtn = new Button(context);
         qrBtn=new Button(context);
         voiceBtn=new Button(context);
-
+        
         // 텍스트 설정
         sendBtn.setText("송금");
         qrBtn.setText("큐알 결제");
         voiceBtn.setText("음성");
-
+        
         // 버튼 디자인 설정
         sendBtn.setBackgroundResource(R.drawable.custom_button);
         qrBtn.setBackgroundResource(R.drawable.custom_button);
@@ -159,10 +129,7 @@ public class OverlayButton {
             remove();
             manager.setFirstClick(true);
 
-            Log.d("VC", "버튼 눌려짐");
-            voiceService.startListening();
-            Log.d("VC", "버튼 끝남");
-
+            
         });
 
 
