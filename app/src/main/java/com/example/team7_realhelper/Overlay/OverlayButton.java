@@ -123,43 +123,43 @@ public class OverlayButton {
             manager.setFirstClick(true);
 
             Intent intent = new Intent(context, OverlayService.class);
-            intent.putExtra("x1", 870);  // 1단계 좌표 (송금)
-            intent.putExtra("y1", 400);
+            intent.putExtra("x1", 860);  // 1단계 좌표 (송금)
+            intent.putExtra("y1", 520);
             intent.putExtra("width1", 150);
             intent.putExtra("height1", 150);
 
-            intent.putExtra("x2", 480);  // 2단계 좌표 (계좌번호 입력)
-            intent.putExtra("y2", -640);
+            intent.putExtra("x2", 500);  // 2단계 좌표 (계좌번호 입력)
+            intent.putExtra("y2", -940);
             intent.putExtra("width2", 500);
             intent.putExtra("height2", 120);
 
-            intent.putExtra("x3", 100);  // 3단계 좌표 (은행/증권사)
-            intent.putExtra("y3", 540);
+            intent.putExtra("x3", 80);  // 3단계 좌표 (은행/증권사)
+            intent.putExtra("y3", 660);
             intent.putExtra("width3", 500);
             intent.putExtra("height3", 120);
 
-            intent.putExtra("x4", 60);  // 4단계 좌표 (카카오뱅크)
-            intent.putExtra("y4", 250);
+            intent.putExtra("x4", 65);  // 4단계 좌표 (카카오뱅크)
+            intent.putExtra("y4", 35);
             intent.putExtra("width4", 220);
             intent.putExtra("height4", 220);
 
-            intent.putExtra("x5", 100);  // 5단계 좌표 (확인)
-            intent.putExtra("y5", -575);
+            intent.putExtra("x5", 120);  // 5단계 좌표 (확인)
+            intent.putExtra("y5", -870);
             intent.putExtra("width5", 850);
             intent.putExtra("height5", 150);
 
             intent.putExtra("x6", 120);  // 6단계 좌표 (확인)
-            intent.putExtra("y6", -630);
+            intent.putExtra("y6", -940);
             intent.putExtra("width6", 850);
             intent.putExtra("height6", 150);
 
             intent.putExtra("x7", 430);  // 7단계 좌표 (보내기)
-            intent.putExtra("y7", -620);
+            intent.putExtra("y7", -920);
             intent.putExtra("width7", 600);
             intent.putExtra("height7", 150);
 
             intent.putExtra("x8", 430);  // 8단계 좌표 (확인)
-            intent.putExtra("y8", -620);
+            intent.putExtra("y8", -920);
             intent.putExtra("width8", 600);
             intent.putExtra("height8", 150);
 
@@ -172,8 +172,8 @@ public class OverlayButton {
             manager.setFirstClick(true);
 
             Intent intent = new Intent(context, OverlayService.class);
-            intent.putExtra("x1", 85);
-            intent.putExtra("y1", 140);
+            intent.putExtra("x1", 100);
+            intent.putExtra("y1", 250);
             intent.putExtra("width1", 120);
             intent.putExtra("height1", 120);
 
